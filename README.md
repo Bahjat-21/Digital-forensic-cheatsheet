@@ -189,6 +189,84 @@ Autopsy provides:
 
 #  DF Cheatsheet – Sleuth Kit (TSK)
 
+## File System Layer
+- `fsstat`  
+  Display all details associated with a file system.
+
+## File Name Layer
+- `ffind`  
+  Find unallocated and allocated file names that point to specific metadata.
+- `fls`  
+  List directory names (including deleted files).
+
+## Metadata Layer
+- `icat`  
+  Extract data units from a file using metadata address instead of filename.
+- `ifind`  
+  Find metadata structure for a given file name or related pointer.
+- `ils`  
+  List metadata structures and their content.
+- `istat`  
+  Display statistics (MAC times, size, etc.) of metadata structures.
+
+## Data Unit Layer
+- `blkcat`  
+  Extract and display contents of a data unit.
+- `blkls`  
+  List details of data units, including allocation status.
+- `blkstats`  
+  Display statistics for data units.
+- `blkcalc`  
+  Calculate where unallocated space data resides on the image.
+
+## File System Journal Layer
+- `jcat`  
+  Display information of a journal block.
+- `jls`  
+  List entries for a file system journal.
+
+## Volume System Layer
+- `mmls`  
+  Display disk layout and partition organization.
+- `mmstat`  
+  Show information on the volume system.
+- `mmcat`  
+  Extract contents from a partition.
+
+---
+
+## Image File Layer
+- `img_stat`  
+  Display details of an image file (size, byte range, split format).
+- `img_cat`  
+  Output raw contents of image files.
+
+## Disk Tools Layer
+- `disk_sreset`  
+  Remove Host Protected Areas (HPA) if they exist.
+- `disk_stat`  
+  Display whether HPAs exist on an image.
+
+## Automated Tools
+- `tsk_comparedir`  
+  Compare local directories with images/raw devices (detect rootkits hiding files).
+- `tsk_gettimes`  
+  Extract metadata for `mactime` to create forensic timelines.
+- `tsk_loaddb`  
+  Save volume, image, and metadata to an SQLite database for further analysis.
+- `tsk_recover`  
+  Extract unallocated and allocated files from an image into a local directory.
+
+## Miscellaneous
+- `hfind`  
+  Compare hashes with a hash database (MD5/SHA1).
+- `mactime`  
+  Create a timeline for file activity.
+- `sorter`  
+  Sort files by type, check extensions, and perform hash lookups.
+- `sigfind`  
+  Find binary signatures in a dataset.
+---
 - `fls -r -f ntfs image.dd`  
   List all files recursively from an NTFS image.
 
