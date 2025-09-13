@@ -121,90 +121,82 @@
   Create a timeline of events.
 
 
-# ===== AUTOPSY =====
-# Autopsy is GUI-based, but can be launched from terminal
+- `autopsy`  
+  Start Autopsy (usually runs a local web server on port 9999).  
 
-autopsy
-# Start Autopsy (usually runs a local web server on port 9999)
+ Access it in your browser:  
+http://localhost:9999/autopsy  
 
-# Then access it in your browser:
-# http://localhost:9999/autopsy
+Autopsy provides:  
+- File system analysis  
+- Timeline analysis  
+- Keyword search  
+- Hash set comparison  
+- Email and web artifact analysis  
 
-# Autopsy provides:
-# - File system analysis
-# - Timeline analysis
-# - Keyword search
-# - Hash set comparison
-# - Email and web artifact analysis
+---
 
+- `fls -r -f ntfs image.dd`  
+  List all files recursively from an NTFS image.
 
-# ===== SLEUTH KIT (TSK) =====
-# Core forensic command-line tools for disk and file system analysis
+- `fls -m / image.dd > bodyfile.txt`  
+  Create bodyfile for timeline analysis.
 
-fls -r -f ntfs image.dd
-# List all files recursively from an NTFS image
+- `mactime -b bodyfile.txt > timeline.txt`  
+  Generate timeline from bodyfile.
 
-fls -m / image.dd > bodyfile.txt
-# Create bodyfile for timeline analysis
+- `icat image.dd <inode>`  
+  Extract file by inode number.
 
-mactime -b bodyfile.txt > timeline.txt
-# Generate timeline from bodyfile
+- `istat image.dd <inode>`  
+  Show metadata about a file (MAC times, size, etc.).
 
-icat image.dd <inode>
-# Extract file by inode number
+- `fsstat image.dd`  
+  Display file system details.
 
-istat image.dd <inode>
-# Show metadata about a file (MAC times, size, etc.)
+- `ffind image.dd filename.txt`  
+  Find inode of a file by name.
 
-fsstat image.dd
-# Display file system details
+- `tsk_recover -e image.dd recovered/`  
+  Extract files from a disk image into a directory.
 
-ffind image.dd filename.txt
-# Find inode of a file by name
+---
 
-tsk_recover -e image.dd recovered/
-# Extract files from a disk image into a directory
+- `log2timeline.py timeline.dump image.dd`  
+  Create a Plaso storage file (timeline.dump) from an image.
 
+- `psort.py -o L2tcsv timeline.dump > timeline.csv`  
+  Convert Plaso storage file into CSV format.
 
-# ===== PLASO / LOG2TIMELINE =====
-# Plaso creates super timelines from log files, registry, browser history, etc.
+- `pinfo.py timeline.dump`  
+  Show info about the Plaso storage file.
 
-log2timeline.py timeline.dump image.dd
-# Create a Plaso storage file (timeline.dump) from an image
+- `log2timeline.py --parsers win7 -f mount_point/ timeline.dump`  
+  Use specific parser for Windows 7 artifacts.  
 
-psort.py -o L2tcsv timeline.dump > timeline.csv
-# Convert Plaso storage file into CSV format
+ Common artifacts parsed:  
+- Browser history  
+- Event logs  
+- Registry keys  
+- Prefetch files  
+- File system timestamps  
 
-pinfo.py timeline.dump
-# Show info about the Plaso storage file
+---
 
-log2timeline.py --parsers win7 -f mount_point/ timeline.dump
-# Use specific parser for Windows 7 artifacts
+- `bulk_extractor -o output_dir image.dd`  
+  Run bulk_extractor on disk image, results go into output_dir.
 
-# Common artifacts parsed:
-# - Browser history
-# - Event logs
-# - Registry keys
-# - Prefetch files
-# - File system timestamps
+- `bulk_extractor -o output_dir -R /path/to/subdir image.dd`  
+  Focus scan on a specific subdirectory of the image.
 
+- `bulk_extractor -o output_dir -E email image.dd`  
+  Extract only emails.
 
-# ===== BULK_EXTRACTOR =====
-# Extracts features like email addresses, URLs, credit card numbers, from raw images
+- `bulk_extractor -o output_dir -E url image.dd`  
+  Extract only URLs.
 
-bulk_extractor -o output_dir image.dd
-# Run bulk_extractor on disk image, results go into output_dir
+- `bulk_extractor -o output_dir -E ccns image.dd`  
+  Extract only credit card numbers.  
 
-bulk_extractor -o output_dir -R /path/to/subdir image.dd
-# Focus scan on a specific subdirectory of the image
+ Results are saved as text files (`email.txt`, `url.txt`, etc.) in output_dir.
 
-bulk_extractor -o output_dir -E email image.dd
-# Extract only emails
-
-bulk_extractor -o output_dir -E url image.dd
-# Extract only URLs
-
-bulk_extractor -o output_dir -E ccns image.dd
-# Extract only credit card numbers
-
-# Results are saved as text files (email.txt, url.txt, etc.) in output_dir
