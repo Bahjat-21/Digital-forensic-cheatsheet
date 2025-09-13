@@ -210,6 +210,14 @@ Autopsy provides:
  Results are saved as text files (`email.txt`, `url.txt`, etc.) in output_dir.
 
  #  DF Cheatsheet – Disk Imaging & Duplication
+- `mmls -i list windowsxp.dd`  
+  Show partition layout of a disk image.
+
+- `mount -t ntfs-3g -o ro,loop,noexec,show_sys_files,streams_interface=windows,offset=$((51*512)) windowsxp.dd /mnt/windows_mount/`  
+  Mount an NTFS partition from a disk image in **read-only mode**, with support for Alternate Data Streams (ADS).
+
+- `umount /mnt/windows_mount/`  
+  Safely unmount the forensic mount point.
 
 - `dd if=/dev/sda of=disk.img bs=4M conv=noerror,sync`  
   Create a raw disk image.
@@ -234,6 +242,14 @@ Autopsy provides:
 
 - `gpg --verify disk.img.sig disk.img`  
   Verify integrity of signed image.
+
+- `dcfldd if=windowsxp.dd bs=512 skip=51 count=256224 of=filesystem.dd`  
+  Extract a specific partition from a disk image using `dcfldd`.  
+  - `if=windowsxp.dd` → input image  
+  - `bs=512` → block size (sector size)  
+  - `skip=51` → skip first 51 sectors (partition offset)  
+  - `count=256224` → number of sectors to copy  
+  - `of=filesystem.dd` → output partition image  
 
 #  DF Cheatsheet – File & Filesystem Analysis
 
@@ -551,3 +567,124 @@ Autopsy provides:
 
 - `%UserProfile%\\NTUSER.DAT`  
   User registry hive.
+
+#  DF Cheatsheet – Memory Acquisition
+
+- `dd if=/dev/fmem of=/mnt/mem.dd bs=4096 conv=noerror,sync`  
+  Acquire a memory dump on Linux using the fmem kernel module.
+
+- `insmod ./lime.ko "path=/mnt/memdump.lime format=lime"`  
+  Load LiME kernel module to dump memory in LiME format.
+
+- `winpmem.exe --output memdump.raw`  
+  Acquire physical memory on Windows with WinPmem.
+
+- `DumpIt.exe`  
+  Create a complete memory dump on Windows (simple double-click tool).
+
+- `avml memory.lime`  
+  Acquire volatile memory on Linux using AVML (Azure tool).
+
+- `Belkasoft RAM Capturer`  
+  Windows GUI tool for memory acquisition.
+
+- `osforensics.exe /acquirememory memdump.bin`  
+  Acquire memory with OSForensics tool.
+
+- `powercfg /h on`  
+  Enable hibernation file (hiberfil.sys) for later forensic extraction.
+
+- `copy C:\\hiberfil.sys D:\\case\\hiberfil.sys`  
+  Copy Windows hibernation file for analysis.
+
+- `strings pagefile.sys | less`  
+  Extract readable text from Windows pagefile.sys (swap file).
+
+- `dd if=/dev/sda2 of=swapfile.dd bs=4M`  
+  Copy Linux swap partition for analysis.
+
+#  DF Cheatsheet – Memory Analysis
+
+- `strings memdump.raw | grep "password"`  
+  Search memory dump for passwords.
+
+- `bulk_extractor -o output_dir memdump.raw`  
+  Extract features (URLs, emails, credit cards) from memory.
+
+- `yara -r rules.yar memdump.raw`  
+  Scan memory with YARA rules.
+
+- `volatility -f memdump.raw imageinfo`  
+  Identify profile of memory dump.
+
+- `volatility -f memdump.raw --profile=Win7SP1x64 pslist`  
+  List processes.
+
+- `volatility -f memdump.raw netscan`  
+  Show active network connections.
+
+- `rekall -f memdump.raw pslist`  
+  Analyze memory dump with Rekall.
+
+- `redline.exe`  
+  Use Redline (FireEye) for advanced memory and IOC analysis.
+
+- `memprocfs.exe -device memdump.raw -forensic 1`  
+  Mount memory dump as a virtual filesystem (MemProcFS).
+
+#  DF Cheatsheet – Application Forensics
+
+##  Web Browsers
+- `sqlite3 places.sqlite "SELECT url, datetime(visit_date/1000000,'unixepoch') FROM moz_places;"`  
+  Extract Firefox history.
+
+- `sqlite3 History "SELECT url, title, last_visit_time FROM urls;"`  
+  Extract Chrome history.
+
+- `sqlite3 Cookies "SELECT host_key, name, value FROM cookies;"`  
+  Extract stored browser cookies.
+
+---
+
+##  Email
+- `cat Inbox.mbox | grep "From:"`  
+  Extract sender information from mbox files.
+
+- `strings outlook.pst | grep "@domain.com"`  
+  Extract emails from Outlook PST file.
+
+---
+
+##  Office Files
+- `exiftool report.docx`  
+  Extract metadata from Office documents.
+
+- `strings document.docx | grep "Confidential"`  
+  Search inside Office files for keywords.
+
+---
+
+##  Chat & Messaging
+- `sqlite3 main.db "SELECT author, text, datetime(timestamp/1000,'unixepoch') FROM messages;"`  
+  Extract Skype chat history.
+
+- `strings msgstore.db | grep "text"`  
+  Extract WhatsApp messages from backup.
+
+---
+
+##  VPN & Logs
+- `cat /var/log/openvpn.log`  
+  Check OpenVPN logs.
+
+- `Get-WinEvent -LogName "Application" | ? Message -match "VPN"`  
+  Search Windows event logs for VPN entries.
+
+---
+
+##  Anti-Forensics
+- Look for anomalies like:  
+  - Deleted browser history  
+  - Cleared logs  
+  - Timestamp manipulation (timestomping)  
+  - Encrypted containers (VeraCrypt, BitLocker)
