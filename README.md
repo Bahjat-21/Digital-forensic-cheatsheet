@@ -166,6 +166,24 @@ Autopsy provides:
 - `tsk_recover -e image.dd recovered/`  
   Extract files from a disk image into a directory.
 
+  - `fls -r -f ntfs image.dd`  
+  List files recursively in NTFS image.
+
+- `icat image.dd <inode>`  
+  Extract file by inode.
+
+- `istat image.dd <inode>`  
+  Show metadata (MAC times, size, etc.).
+
+- `ffind image.dd filename.txt`  
+  Find inode of file by name.
+
+- `tsk_recover -e image.dd output/`  
+  Recover all files from image.
+
+- `mactime -b bodyfile.txt > timeline.txt`  
+  Create timeline from bodyfile.
+
 #  DF Cheatsheet – Plaso / Log2Timeline
 
 - `log2timeline.py timeline.dump image.dd`  
@@ -205,3 +223,73 @@ Autopsy provides:
   Extract only credit card numbers.  
 
  Results are saved as text files (`email.txt`, `url.txt`, etc.) in output_dir.
+
+ #  DF Cheatsheet – Disk Imaging & Duplication
+
+- `dd if=/dev/sda of=disk.img bs=4M conv=noerror,sync`  
+  Create a raw disk image.
+
+- `dc3dd if=/dev/sda of=disk.img hash=md5 log=logfile.txt`  
+  Forensic imaging with integrated hashing.
+
+- `ewfacquire -t case1.E01 /dev/sda`  
+  Acquire forensic image in EnCase EWF format.
+
+- `xmount --in ewf evidence.E01 --out raw /mnt/evidence`  
+  Convert and mount forensic images.
+
+- `md5sum disk.img` / `sha256sum disk.img`  
+  Generate hash values for verification.
+
+- `gpg --gen-key`  
+  Generate GPG keypair (for signing).
+
+- `gpg --detach-sign disk.img`  
+  Create detached signature of image.
+
+- `gpg --verify disk.img.sig disk.img`  
+  Verify integrity of signed image.
+
+#  DF Cheatsheet – File & Filesystem Analysis
+
+- `fdisk -l`  
+  List partitions on a disk.
+
+- `mount -o ro,loop image.dd /mnt/forensic`  
+  Mount a disk image read-only for analysis.
+
+- `file suspicious.bin`  
+  Identify file type using magic numbers.
+
+- `strings suspicious.bin | less`  
+  Extract printable strings from a binary.
+
+- `xxd file.bin | less`  
+  Hex dump of a file.
+
+- `stat file.txt`  
+  Show detailed file metadata (MAC times, size, inode).
+
+- `touch -t 202201010101 file.txt`  
+  Manipulate file timestamps.
+
+- `timestomp C:\\ -r`  
+  (Meterpreter) Reset MAC times for antiforensics.
+
+---
+
+### Useful Filesystem Commands
+- `ls -l`  
+  List files with metadata.
+
+- `ls -i`  
+  Show inode numbers.
+
+- `df -h`  
+  Show mounted filesystems.
+
+- `du -sh *`  
+  Show disk usage per directory.
+
+- `find / -type f -name "*.docx"`  
+  Search files by type or name.
