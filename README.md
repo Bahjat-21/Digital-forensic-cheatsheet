@@ -1,5 +1,8 @@
 # Digital-forensic-cheatsheet
-###  Digital Forensics Commands
+This cheatsheet contains essential commands for DFIR (Digital Forensics and Incident Response) analysis, covering memory forensics, disk analysis, timelines, and artifact extraction.
+
+---
+#  DF Cheatsheet – Grep & Strings
 
 - `grep "keyword" file.txt`  
   Search for keyword in a file.
@@ -49,12 +52,13 @@
   Scan the entire file, not just loaded sections.  
 
  Useful for:  
-  - Extracting suspicious URLs, IP addresses  
-  - Finding registry keys in Windows hives  
-  - Detecting embedded shellcode  
+- Extracting suspicious URLs, IP addresses  
+- Finding registry keys in Windows hives  
+- Detecting embedded shellcode
 
----
+#  DF Cheatsheet – Volatility 2 & 3
 
+## Volatility 2
 - `volatility -f memory.img imageinfo`  
   Identify profile (OS version) of the memory image.
 
@@ -96,6 +100,7 @@
 
 ---
 
+## Volatility 3
 - `vol.py -f memory.img windows.info`  
   Get basic OS and memory info.
 
@@ -120,11 +125,12 @@
 - `vol.py -f memory.img timeliner`  
   Create a timeline of events.
 
+#  DF Cheatsheet – Autopsy
 
 - `autopsy`  
-  Start Autopsy (usually runs a local web server on port 9999).  
+  Start Autopsy (runs a local web server on port 9999).  
 
- Access it in your browser:  
+ Access in your browser:  
 http://localhost:9999/autopsy  
 
 Autopsy provides:  
@@ -132,9 +138,9 @@ Autopsy provides:
 - Timeline analysis  
 - Keyword search  
 - Hash set comparison  
-- Email and web artifact analysis  
+- Email and web artifact analysis
 
----
+#  DF Cheatsheet – Sleuth Kit (TSK)
 
 - `fls -r -f ntfs image.dd`  
   List all files recursively from an NTFS image.
@@ -160,7 +166,7 @@ Autopsy provides:
 - `tsk_recover -e image.dd recovered/`  
   Extract files from a disk image into a directory.
 
----
+#  DF Cheatsheet – Plaso / Log2Timeline
 
 - `log2timeline.py timeline.dump image.dd`  
   Create a Plaso storage file (timeline.dump) from an image.
@@ -179,9 +185,9 @@ Autopsy provides:
 - Event logs  
 - Registry keys  
 - Prefetch files  
-- File system timestamps  
+- File system timestamps
 
----
+#  DF Cheatsheet – Bulk Extractor
 
 - `bulk_extractor -o output_dir image.dd`  
   Run bulk_extractor on disk image, results go into output_dir.
@@ -199,4 +205,3 @@ Autopsy provides:
   Extract only credit card numbers.  
 
  Results are saved as text files (`email.txt`, `url.txt`, etc.) in output_dir.
-
