@@ -278,3 +278,276 @@ Autopsy provides:
 
 - `find / -type f -name "*.docx"`  
   Search files by type or name.
+
+#  DF Cheatsheet – Linux Forensics
+
+##  Live Response
+- `date -u`  
+  Show current system time in UTC.
+
+- `uptime`  
+  Display system uptime and load averages.
+
+- `dmesg | less`  
+  Show kernel ring buffer (boot/system messages).
+
+- `cat /proc/cpuinfo`  
+  Show CPU details.
+
+- `cat /proc/meminfo`  
+  Show memory information.
+
+---
+
+##  Processes & Memory
+- `ps aux`  
+  List running processes.
+
+- `top`  
+  Show real-time process usage.
+
+- `lsof -nP`  
+  List open files and network connections.
+
+- `cat /proc/<PID>/maps`  
+  Show memory mappings of a process.
+
+- `cat /proc/<PID>/cmdline`  
+  Show process command-line arguments.
+
+---
+
+##  Networking
+- `ifconfig -a`  
+  Show network interfaces and IP addresses.
+
+- `ip addr show`  
+  Show IP addresses (newer command).
+
+- `arp -vn`  
+  Display ARP cache.
+
+- `netstat -tulpen`  
+  Show active connections and listening ports.
+
+- `ss -tulpen`  
+  Replacement for netstat (faster).
+
+- `iptables -L -n -v`  
+  Show firewall rules.
+
+---
+
+##  Users & Logins
+- `who`  
+  Show logged-in users.
+
+- `w`  
+  Show logged-in users with activity.
+
+- `last`  
+  Show login history.
+
+- `id <username>`  
+  Show UID, GID, and groups of a user.
+
+- `cat /etc/passwd`  
+  List user accounts.
+
+- `cat /etc/shadow`  
+  Show password hashes (root only).
+
+---
+
+##  Logs & Persistence
+- `ls -l /var/log/`  
+  List system log files.
+
+- `less /var/log/auth.log`  
+  Check authentication logs.
+
+- `less /var/log/syslog`  
+  General system log.
+
+- `systemctl list-unit-files --type=service`  
+  Show installed services.
+
+- `chkconfig --list`  
+  Show startup services (older systems).
+
+---
+
+##  Rootkit Detection
+- `lsmod`  
+  List loaded kernel modules.
+
+- `chkrootkit`  
+  Run chkrootkit rootkit detection tool.
+
+- `rkhunter --check`  
+  Run Rootkit Hunter.
+
+#  DF Cheatsheet – Windows Live Response
+
+##  System Info
+- `systeminfo`  
+  Display OS version and patch level.
+
+- `wmic qfe list`  
+  Show installed hotfixes.
+
+- `hostname`  
+  Display system hostname.
+
+---
+
+##  Processes & Services
+- `tasklist`  
+  List running processes.
+
+- `tasklist /svc`  
+  Show processes with associated services.
+
+- `sc query`  
+  Query running services.
+
+- `wmic process list full`  
+  Detailed process list.
+
+---
+
+##  Networking
+- `ipconfig /all`  
+  Show IP configuration.
+
+- `netstat -ano`  
+  List active connections with PIDs.
+
+- `arp -a`  
+  Show ARP cache.
+
+- `route print`  
+  Display routing table.
+
+---
+
+##  Users & Logins
+- `query user`  
+  Show logged-in users.
+
+- `net user`  
+  List local user accounts.
+
+- `net localgroup administrators`  
+  Show local administrators.
+
+- `whoami /all`  
+  Show current user privileges.
+
+---
+
+##  Persistence & Startup
+- `wmic startup get caption,command`  
+  List auto-start programs.
+
+- `schtasks /query /fo LIST /v`  
+  List scheduled tasks.
+
+---
+
+##  Sysinternals Suite (must be downloaded)
+- `PsExec.exe \\target cmd`  
+  Run remote command.
+
+- `PsList.exe`  
+  List processes.
+
+- `PsLoggedOn.exe`  
+  Show logged-on users.
+
+- `PsService.exe`  
+  Query and control services.
+
+---
+
+##  IR Frameworks
+- **KAPE** (Kroll Artifact Parser and Extractor)  
+  Collect artifacts quickly from live systems.
+
+- **Velociraptor**  
+  Endpoint visibility and collection tool.
+
+#  DF Cheatsheet – Windows Post-Mortem Forensics
+
+##  File System & Metadata
+- `fsutil usn readjournal c:`  
+  Read the NTFS change journal.
+
+- `dir /r`  
+  Show alternate data streams (ADS).
+
+---
+
+##  Registry Hives
+- `reg save HKLM\\SAM sam.save`  
+  Export SAM hive.
+
+- `reg save HKLM\\SYSTEM system.save`  
+  Export SYSTEM hive.
+
+- `reg save HKLM\\SECURITY security.save`  
+  Export SECURITY hive.
+
+- `reg query HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run`  
+  Check auto-start entries.
+
+---
+
+##  Event Logs
+- `wevtutil el`  
+  List all event logs.
+
+- `wevtutil qe Security /c:10 /f:text /q:*`  
+  Export 10 recent security events.
+
+---
+
+##  Scheduled Tasks
+- `schtasks /query /fo LIST /v`  
+  List scheduled tasks.
+
+---
+
+##  Prefetch
+- `dir C:\\Windows\\Prefetch`  
+  Show prefetch files.
+
+---
+
+##  Jump Lists
+- `%AppData%\\Microsoft\\Windows\\Recent\\AutomaticDestinations`  
+  Location of automatic Jump Lists.
+
+- `%AppData%\\Microsoft\\Windows\\Recent\\CustomDestinations`  
+  Location of custom Jump Lists.
+
+---
+
+##  Shadow Copies
+- `vssadmin list shadows`  
+  List shadow copies.
+
+- `vssadmin list providers`  
+  Show VSS providers.
+
+---
+
+##  Other Useful Locations
+- `%SystemRoot%\\System32\\winevt\\Logs\\`  
+  Event log storage.
+
+- `%SystemRoot%\\Prefetch\\`  
+  Prefetch directory.
+
+- `%UserProfile%\\NTUSER.DAT`  
+  User registry hive.
