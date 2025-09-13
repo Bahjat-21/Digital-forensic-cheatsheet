@@ -166,23 +166,8 @@ Autopsy provides:
 - `tsk_recover -e image.dd recovered/`  
   Extract files from a disk image into a directory.
 
-  - `fls -r -f ntfs image.dd`  
-  List files recursively in NTFS image.
-
-- `icat image.dd <inode>`  
-  Extract file by inode.
-
-- `istat image.dd <inode>`  
-  Show metadata (MAC times, size, etc.).
-
-- `ffind image.dd filename.txt`  
-  Find inode of file by name.
-
 - `tsk_recover -e image.dd output/`  
   Recover all files from image.
-
-- `mactime -b bodyfile.txt > timeline.txt`  
-  Create timeline from bodyfile.
 
 #  DF Cheatsheet – Plaso / Log2Timeline
 
